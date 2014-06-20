@@ -1,0 +1,18 @@
+{
+  "name": "routemaster",
+  "version": "0.0.0",
+  "description": "A small route loader for express.js 4.x",
+  "author": "Chris Newton <chrisn@brandwatch.com>",
+  "main": "routemaster.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chrisnewtn/pathfinder.git"
+  },
+  "keywords": [
+    "express",
+    "routing"
+  ],
+  "dependencies": {
+    "express": "^4.4.3"
+  }
+}
