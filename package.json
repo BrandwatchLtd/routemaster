@@ -17,12 +17,12 @@
     "routing"
   ],
   "dependencies": {
-    "express": "^4.4.3"
+    "express": "^4.8.4"
   },
   "devDependencies": {
     "expectations": "^0.2.5",
-    "mocha": "^1.20.1",
-    "sandboxed-module": "^1.0.0",
-    "sinon": "^1.10.2"
+    "mocha": "^1.21.4",
+    "sandboxed-module": "^1.0.1",
+    "sinon": "^1.10.3"
   }
 }
