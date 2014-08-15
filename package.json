@@ -4,6 +4,7 @@
   "description": "A small route loader for express.js 4.x",
   "author": "Chris Newton <chrisn@brandwatch.com>",
   "main": "routemaster.js",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/chrisnewtn/pathfinder.git"
