@@ -9,11 +9,11 @@ In the directory you provide to Routemaster, there should be at least one file t
 
 ```js
 module.exports = function(router){
-  return router;
+  // do stuff with the router
 };
 ```
 
-This is a routing file, which is basically just something that returns a function which accepts a router and returns that same router. Just add your routes to the router in the body.
+This is a routing file, which is basically just something that returns a function which accepts a router. Just add your routes to the router in the body. The router is passed by reference, so don't worry about returning it.
 
 Feel free to create as many of these files as you like, in as many sub directories as you like; each one is just added to the amalgamated router via `Router.use`.
 
@@ -26,10 +26,19 @@ var routemaster = require('routemaster');
 var express = require('express');
 var app = express();
 
-app.use(routemaster('./routes'));
+app.use(routemaster({
+    directory: './routes',
+    Router: express.Router
+}));
 
 app.listen(3000);
 ```
+
+Both the `directory` and `Router` options are **required**.
+
+Please take careful notice that `Router` start with an uppercase "R" and should be the `express.Router` constructor, _not_ an instantiated Router.
+
+The `directory` parameter is simply the directory through which you wish to recurse.
 
 That's about it, PRs accepted.
 
