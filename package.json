@@ -10,19 +10,16 @@
     "url": "git://github.com/chrisnewtn/pathfinder.git"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "cover": "istanbul cover _mocha test"
   },
   "keywords": [
     "express",
     "routing"
   ],
-  "dependencies": {
-    "express": "^4.8.4"
-  },
   "devDependencies": {
-    "expectations": "^0.2.5",
-    "mocha": "^1.21.4",
-    "sandboxed-module": "^1.0.1",
-    "sinon": "^1.10.3"
+    "express": "^4.8.4",
+    "istanbul": "^0.3.0",
+    "mocha": "^1.21.4"
   }
 }

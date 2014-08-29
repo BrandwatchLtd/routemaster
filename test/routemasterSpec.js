@@ -1,47 +1,38 @@
 'use strict';
 
-var path = require('path');
-var sinon = require('sinon');
-var SandboxedModule = require('sandboxed-module');
+var assert = require('assert');
+var express = require('express');
+var routemaster = require('../routemaster');
 
 function isExpressRouter(router){
-    expect(typeof router).toEqual('function');
-    expect(typeof router.get).toEqual('function');
-    expect(typeof router.handle).toEqual('function');
-    expect(typeof router.use).toEqual('function');
+    return typeof router === 'function' &&
+        typeof router.get === 'function' &&
+        typeof router.handle === 'function' &&
+        typeof router.use === 'function';
 }
 
 describe('routemaster', function(){
-    var routemaster;
     var router;
-    var example1Spy;
-    var example2Spy;
-
-    function getRoutingFileSpies(){
-        var requires = {};
-        var example1 = path.resolve(__dirname, '../example/routingFile');
-        var example2 = path.resolve(__dirname, '../example/subDirectory/routingFile');
-
-        requires[example1] = example1Spy = sinon.spy(require(example1));
-        requires[example2] = example2Spy = sinon.spy(require(example2));
-
-        return requires;
-    }
 
     before(function(){
-        routemaster = SandboxedModule.require('../routemaster', {
-            requires: getRoutingFileSpies()
+        router = routemaster({
+            directory: '../example',
+            Router: express.Router
         });
-        router = routemaster('../example');
+    });
+
+    it('throws if the express.Router option isn\'t passed', function(){
+        assert.throws(routemaster, /Routemaster requires express.Router as its Router option/);
+    });
+
+    it('throws if the directory option isn\'t passed', function(){
+        assert.throws(function(){
+            routemaster({ Router: express.Router });
+        }, /Routemaster require a directory option/);
     });
 
     it('returns an Express Router', function(){
-        isExpressRouter(router);
-    });
-
-    it('provides each routing file with a new Express Router', function(){
-        isExpressRouter(example1Spy.args[0][0]);
-        isExpressRouter(example2Spy.args[0][0]);
+        assert.strictEqual(isExpressRouter(router), true);
     });
 
     describe('the routing file ../example/routingFile', function(){
