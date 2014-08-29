@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/chrisnewtn/pathfinder.git"
+    "url": "git@github.com:BrandwatchLtd/routemaster.git"
   },
   "scripts": {
     "test": "mocha",
