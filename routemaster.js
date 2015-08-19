@@ -27,7 +27,15 @@ function getRoutingFiles(directory){
 
 function buildRouter(masterRouter, routingFile){
     var router = new Router();
-    require(routingFile)(router);
+    var routingFn;
+
+    try{
+        routingFn = require(routingFile);
+    } catch(e){}
+
+    if(typeof routingFn === 'function'){
+        routingFn(router);
+    }
 
     masterRouter.use(router);
     return masterRouter;
