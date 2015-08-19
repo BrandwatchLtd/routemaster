@@ -1,6 +1,6 @@
 {
   "name": "routemaster",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A small route loader for express.js 4.x",
   "author": "Chris Newton <chrisn@brandwatch.com>",
   "main": "routemaster.js",
