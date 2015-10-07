@@ -2,7 +2,6 @@
 
 var fs = require('fs');
 var path = require('path');
-var Router;
 
 function resolveDirectory(directory){
     var parentDirectory = path.dirname(module.parent.filename);
@@ -25,36 +24,36 @@ function getRoutingFiles(directory){
     }, []);
 }
 
-function buildRouter(masterRouter, routingFile){
-    var router = new Router();
-    var routingFn;
+function appendToRouter(router, routingFile) {
+    var routingFn = require(routingFile);
 
-    try{
-        routingFn = require(routingFile);
-    } catch(e){}
-
-    if(typeof routingFn === 'function'){
+    if (typeof routingFn === 'function') {
         routingFn(router);
     }
-
-    masterRouter.use(router);
-    return masterRouter;
 }
 
-module.exports = function routemaster(options){
-    options = options || {};
+module.exports = function routemaster(opts){
+    var options = opts || {};
 
     if(!options.Router){
         throw new Error('Routemaster requires express.Router as its Router option');
     }
 
-    Router = options.Router;
-
     if(!options.directory){
         throw new Error('Routemaster require a directory option');
     }
 
+    var errorHandler = options.errorHandler || function(){};
     var routingFiles = getRoutingFiles(options.directory);
+    var router = new options.Router();
 
-    return routingFiles.reduce(buildRouter, new Router());
+    for (var i = 0, len = routingFiles.length; i < len; i++) {
+        try {
+            appendToRouter(router, routingFiles[i]);
+        } catch (e) {
+            errorHandler(e);
+        }
+    }
+
+    return router;
 };

@@ -42,5 +42,13 @@ The `directory` parameter is simply the directory through which you wish to recu
 
 That's about it, PRs accepted.
 
+#### options
+
+| option | required | description |
+| ------ | -------- | ----------- |
+| directory | yes | A directory containing modules with routes. May also contain subdirectories with routes modules and so forth. |
+| Router | yes | Use `express.Router` here. This allows Routemaster to be agnostic to express version. |
+| errorHandler | no | When given, errors thrown when attempting to require a routes module will be passed to this function. Useful for logging. When not given, errors are ignored. |
+
 [router]: http://expressjs.com/4x/api.html#router
 [express]: http://expressjs.com/
