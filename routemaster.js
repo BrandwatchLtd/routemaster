@@ -34,9 +34,14 @@ function appendToRouter(router, routingFile) {
 
 module.exports = function routemaster(opts){
     var options = opts || {};
+    var router;
 
-    if(!options.Router){
-        throw new Error('Routemaster requires express.Router as its Router option');
+    if(options.router){
+        router = options.router;
+    }else if(options.Router){
+        router = new options.Router();
+    }else{
+        throw new Error('Routemaster requires a Router constructor or a router option');
     }
 
     if(!options.directory){
@@ -45,13 +50,12 @@ module.exports = function routemaster(opts){
 
     var errorHandler = options.errorHandler || function(){};
     var routingFiles = getRoutingFiles(options.directory);
-    var router = new options.Router();
 
     for (var i = 0, len = routingFiles.length; i < len; i++) {
         try {
             appendToRouter(router, routingFiles[i]);
         } catch (e) {
-            errorHandler(e);
+            errorHandler(e, 'Could not append routing file ' + routingFiles[i]);
         }
     }
 
