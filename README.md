@@ -47,8 +47,11 @@ That's about it, PRs accepted.
 | option | required | description |
 | ------ | -------- | ----------- |
 | directory | yes | A directory containing modules with routes. May also contain subdirectories with routes modules and so forth. |
-| Router | yes | Use `express.Router` here. This allows Routemaster to be agnostic to express version. |
+| Router | yes* | Use `express.Router` here. This allows Routemaster to be agnostic to express version. |
+| router | no | Instead of the `Router` option, you _can_ pass an already instantiated `express.Router`. Useful for when you need to apply stuff to the Router before any routes are added. |
 | errorHandler | no | When given, errors thrown when attempting to require a routes module will be passed to this function. Useful for logging. When not given, errors are ignored. |
+
+_* If a router is passed, Router is not required._
 
 [router]: http://expressjs.com/4x/api.html#router
 [express]: http://expressjs.com/
