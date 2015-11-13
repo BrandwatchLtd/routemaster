@@ -46,4 +46,23 @@ describe('routemaster', function(){
             router.handle({url: '/subdir', method: 'GET'}, { end: done });
         });
     });
+
+    describe('errorHandler', function(){
+        var errors = [];
+
+        before(function(){
+            router = routemaster({
+                directory: '../example',
+                Router: express.Router,
+                errorHandler: function(e){
+                    errors.push(e);
+                }
+            });
+        });
+
+        it('is passed errors when attempting to require routing modules', function(){
+            assert.equal(errors.length, 1);
+            assert.ok(errors[0] instanceof SyntaxError);
+        });
+    });
 });
