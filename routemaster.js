@@ -1,27 +1,13 @@
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
+var glob = require('glob');
 
-function resolveDirectory(directory){
+function getRoutingFiles(directory) {
     var parentDirectory = path.dirname(module.parent.filename);
+    var resolvedDirectory = path.resolve(parentDirectory, directory);
 
-    return path.resolve(parentDirectory, directory);
-}
-
-function getRoutingFiles(directory){
-    var target = resolveDirectory(directory);
-
-    return fs.readdirSync(target).reduce(function(files, route){
-        route = path.join(target, route);
-
-        if(fs.lstatSync(route).isDirectory()){
-            return files.concat(getRoutingFiles(route));
-        }
-        files.push(route);
-
-        return files;
-    }, []);
+    return glob.sync(path.join(resolvedDirectory, '/**/*.js'));
 }
 
 function appendToRouter(router, routingFile) {
@@ -32,18 +18,18 @@ function appendToRouter(router, routingFile) {
     }
 }
 
-module.exports = function routemaster(opts){
+module.exports = function routemaster(opts) {
     var options = opts || {};
 
-    if(!options.Router){
+    if (!options.Router) {
         throw new Error('Routemaster requires express.Router as its Router option');
     }
 
-    if(!options.directory){
+    if (!options.directory) {
         throw new Error('Routemaster require a directory option');
     }
 
-    var errorHandler = options.errorHandler || function(){};
+    var errorHandler = options.errorHandler || function () {};
     var routingFiles = getRoutingFiles(options.directory);
     var router = new options.Router();
 
