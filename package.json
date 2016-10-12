@@ -24,8 +24,5 @@
     "express": "^4.8.4",
     "istanbul": "^0.3.0",
     "mocha": "^1.21.4"
-  },
-  "dependencies": {
-    "glob": "7.1.1"
   }
 }

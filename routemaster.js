@@ -1,13 +1,28 @@
 'use strict';
 
+var fs = require('fs');
 var path = require('path');
-var glob = require('glob');
+
+function resolveDirectory(directory) {
+    var parentDirectory = path.dirname(module.parent.filename);
+
+    return path.resolve(parentDirectory, directory);
+}
 
 function getRoutingFiles(directory) {
-    var parentDirectory = path.dirname(module.parent.filename);
-    var resolvedDirectory = path.resolve(parentDirectory, directory);
+    var target = resolveDirectory(directory);
 
-    return glob.sync(path.join(resolvedDirectory, '/**/*.js'));
+    return fs.readdirSync(target).reduce(function (files, route) {
+        var routePath = path.join(target, route);
+
+        if (fs.lstatSync(routePath).isDirectory()) {
+            return files.concat(getRoutingFiles(routePath));
+        }
+
+        files.push(routePath);
+
+        return files;
+    }, []);
 }
 
 function appendToRouter(router, routingFile) {

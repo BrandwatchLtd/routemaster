@@ -2,5 +2,8 @@
     "env": {
         "node": true
     },
-    "extends": "vizia"
+    "extends": "vizia",
+    "rules": {
+        "no-sync": "off"
+    }
 }
