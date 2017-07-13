@@ -1,0 +1,12 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 2015
+    },
+    "env": {
+        "node": true
+    },
+    "extends": "vizia",
+    "rules": {
+        "no-sync": "off"
+    }
+}

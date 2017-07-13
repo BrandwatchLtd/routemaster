@@ -1,55 +1,59 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
-function resolveDirectory(directory){
-    var parentDirectory = path.dirname(module.parent.filename);
+function resolveDirectory(directory) {
+    const parentDirectory = path.dirname(module.parent.filename);
 
     return path.resolve(parentDirectory, directory);
 }
 
-function getRoutingFiles(directory){
-    var target = resolveDirectory(directory);
+function getRoutingFiles(directory) {
+    const target = resolveDirectory(directory);
+    const routes = fs.readdirSync(target);
+    const files = [];
 
-    return fs.readdirSync(target).reduce(function(files, route){
-        route = path.join(target, route);
+    for (const route of routes) {
+        const routePath = path.join(target, route);
+        const stat = fs.lstatSync(routePath);
 
-        if(fs.lstatSync(route).isDirectory()){
-            return files.concat(getRoutingFiles(route));
+        if (stat.isDirectory()) {
+            files.push(...getRoutingFiles(routePath));
+        } else {
+            files.push(routePath);
         }
-        files.push(route);
+    }
 
-        return files;
-    }, []);
+    return files;
 }
 
 function appendToRouter(router, routingFile) {
-    var routingFn = require(routingFile);
+    const routingFn = require(routingFile);
 
     if (typeof routingFn === 'function') {
         routingFn(router);
     }
 }
 
-module.exports = function routemaster(opts){
-    var options = opts || {};
+module.exports = function routemaster(opts) {
+    const options = opts || {};
 
-    if(!options.Router){
+    if (!options.Router) {
         throw new Error('Routemaster requires express.Router as its Router option');
     }
 
-    if(!options.directory){
+    if (!options.directory) {
         throw new Error('Routemaster require a directory option');
     }
 
-    var errorHandler = options.errorHandler || function(){};
-    var routingFiles = getRoutingFiles(options.directory);
-    var router = new options.Router();
+    const errorHandler = options.errorHandler || (() => {});
+    const routingFiles = getRoutingFiles(options.directory);
+    const router = new options.Router();
 
-    for (var i = 0, len = routingFiles.length; i < len; i++) {
+    for (const file of routingFiles) {
         try {
-            appendToRouter(router, routingFiles[i]);
+            appendToRouter(router, file);
         } catch (e) {
             errorHandler(e);
         }
